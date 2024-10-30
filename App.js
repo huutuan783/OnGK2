@@ -1,21 +1,12 @@
 import { useEffect, useState } from "react";
-import {
-  StyleSheet,
-  Text,
-  View,
-  TextInput,
-  Image,
-  FlatList,
-  ScrollView,
-} from "react-native";
+import {StyleSheet, Text,View,TextInput, Image,FlatList,ScrollView,} from "react-native";
 import axios from "axios";
 import { SafeAreaProvider, SafeAreaView } from "react-native-safe-area-context";
-import { TouchableOpacity, Dimensions } from "react-native";
+import { TouchableOpacity } from "react-native";
 
 export default function App() {
   const [categories, setCategories] = useState([]);
   const [locations, setLocations] = useState([]);
-  const screenWith = Dimensions.get("window").width;
 
   useEffect(() => {
     const fetchData = async () => {
@@ -28,7 +19,6 @@ export default function App() {
         );
         setCategories(categoriesResponse.data);
         setLocations(locationsResponse.data);
-        // setFilteredProducts(locationsResponse.data);
       } catch (error) {
         console.error("Error fetching data:", error);
       }
@@ -78,7 +68,7 @@ export default function App() {
           </View>
 
           <ScrollView
-            contentContainerStyle={{ paddingBottom: 140 }}
+            contentContainerStyle={{ paddingBottom: 100 }}
             style={styles.content}
           >
             <View>
@@ -95,12 +85,7 @@ export default function App() {
               <FlatList
                 data={categories}
                 renderItem={({ item }) => (
-                  <TouchableOpacity
-                    style={[
-                      styles.categoryItem,
-                      { width: (screenWith - 70) / 4 },
-                    ]}
-                  >
+                  <TouchableOpacity style={styles.categoryItem}>
                     <Image
                       style={{ width: 70, height: 70, borderRadius: 50 }}
                       source={{ uri: item.image }}
@@ -109,7 +94,11 @@ export default function App() {
                   </TouchableOpacity>
                 )}
                 keyExtractor={(item) => item.id}
-                numColumns={4}
+                contentContainerStyle={{
+                  flexDirection: "row",
+                  flexWrap: "wrap",
+                  justifyContent: "space-between",
+                }}
               />
             </View>
 
@@ -149,7 +138,7 @@ export default function App() {
                 renderItem={({ item }) => (
                   <TouchableOpacity style={styles.recommendedItem}>
                     <Image
-                      style={{ width: 160, height: 160, borderRadius: 14 }}
+                      style={{ width: 150, height: 150, borderRadius: 14 }}
                       source={{ uri: item.image }}
                     />
                   </TouchableOpacity>
@@ -180,7 +169,7 @@ export default function App() {
             <TouchableOpacity>
               <Image
                 style={{ width: 40, height: 40 }}
-                source={require("./assets/Data/searchicon.png")}
+                source={require("./assets/Data/searchicon1.png")}
               />
               <Text style={{ color: "white" }}>Search</Text>
             </TouchableOpacity>
@@ -282,14 +271,10 @@ const styles = StyleSheet.create({
     width: 25,
     height: 25,
   },
-  categoryList: {
-    flexDirection: "row",
-  },
   categoryItem: {
     marginTop: 10,
-    alignItems: "center",
-    justifyContent: "space-between",
     marginBottom: 10,
+    alignItems: "center",
   },
   populationInfo: {
     flexDirection: "row",
@@ -332,6 +317,7 @@ const styles = StyleSheet.create({
   footer: {
     width: "100%",
     flexDirection: "row",
+    alignItems: "center",
     justifyContent: "space-around",
     position: "absolute",
     bottom: 0,
